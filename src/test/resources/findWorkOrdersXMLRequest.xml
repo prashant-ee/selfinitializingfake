@@ -1,0 +1,29 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <S:Body>
+        <ns3:findCustomerWorkOrder xmlns:ns2="http://www.jio.ril.com/information/CanonicalDataModel/SPWorkOrderEnquiry/"
+                                   xmlns:ns3="http://www.jio.ril.com/integration/services/fulfilment/SPWorkOrderEnquiry/">
+            <findCustomerWorkOrderRequest>
+                <workOrder>
+                    <type>ZINS</type>
+                    <status>CL06</status>
+                    <status>CL04</status>
+                    <Assignment>
+                        <technicianId>0682048616</technicianId>
+                    </Assignment>
+                    <Appointment>
+                        <startDate>2018-10-08</startDate>
+                        <endDate>2018-11-07</endDate>
+                    </Appointment>
+                </workOrder>
+                <dataRecord>
+                    <pagingSize>100</pagingSize>
+                </dataRecord>
+                <salesChannel>
+                    <id>79</id>
+                </salesChannel>
+            </findCustomerWorkOrderRequest>
+        </ns3:findCustomerWorkOrder>
+    </S:Body>
+</S:Envelope>
