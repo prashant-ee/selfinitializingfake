@@ -1,5 +1,6 @@
 package org.prashantkalkar.selfinitializingfake;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 public class GenericEndpoint {
 
-    private static String TARGET_BASE_URL = "http://localhost:8089";
+    @Value("${target.app.base.url}")
+    private String targetBaseUrl;
+
+//    private static String TARGET_BASE_URL = "http://localhost:8089";
 
     // Can cause performance issues but should work for testing purposes.
     Map<Request, ResponseEntity<String>> requestCache = new ConcurrentHashMap<>();
@@ -37,7 +41,7 @@ public class GenericEndpoint {
         if(requestEntity.hasBody())
             thirdPartyRequestEntity = new HttpEntity<>(requestEntity.getBody());
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(TARGET_BASE_URL + requestPath, HttpMethod.valueOf(request.getMethod()), thirdPartyRequestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(targetBaseUrl + requestPath, HttpMethod.valueOf(request.getMethod()), thirdPartyRequestEntity, String.class);
         requestCache.put(new Request(request), responseEntity);
         return responseEntity;
     }
