@@ -19,13 +19,11 @@ public class GenericEndpoint {
     @Value("${target.app.base.url}")
     private String targetBaseUrl;
 
-//    private static String TARGET_BASE_URL = "http://localhost:8089";
-
     // Can cause performance issues but should work for testing purposes.
     Map<Request, ResponseEntity<String>> requestCache = new ConcurrentHashMap<>();
 
     @RequestMapping(path = "/*")
-    ResponseEntity<String> home(HttpServletRequest request, HttpEntity<String> requestEntity) {
+    ResponseEntity<String> generic(HttpServletRequest request, HttpEntity<String> requestEntity) {
         Optional<ResponseEntity<String>> responseOps = getResponseFromCache(request);
         return responseOps.orElseGet(() -> responseFromThirdParty(request, requestEntity));
     }
@@ -53,5 +51,11 @@ public class GenericEndpoint {
             }
         }
         return Optional.empty();
+    }
+
+    @RequestMapping(path = "/__admin/resetcache")
+    public ResponseEntity<Object> resetCache() {
+        requestCache.clear();
+        return ResponseEntity.ok().build();
     }
 }

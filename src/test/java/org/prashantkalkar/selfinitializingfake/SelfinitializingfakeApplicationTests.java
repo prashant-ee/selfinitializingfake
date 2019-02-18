@@ -71,6 +71,21 @@ public class SelfinitializingfakeApplicationTests {
 	}
 
 	@Test
+	public void shouldForwardRequestsToTargetServiceWhenCacheIsReset() {
+		stubFor(post(urlEqualTo("/randomURL"))
+				.willReturn(aResponse().withBody("Hello World!")));
+
+		given().port(port).post("/randomURL").then().statusCode(200).body(equalTo("Hello World!"));
+
+		given().port(port).post("/__admin/resetcache").then().statusCode(200);
+
+		given().port(port).post("/randomURL").then().statusCode(200).body(equalTo("Hello World!"));
+		given().port(port).post("/randomURL").then().statusCode(200).body(equalTo("Hello World!"));
+
+		verify(2, postRequestedFor(urlEqualTo("/randomURL")));
+	}
+
+	@Test
 	public void shouldServeXMLContents() throws URISyntaxException, IOException {
 		String request = readFile("/findWorkOrdersXMLRequest.xml");
 		String response = readFile("/findWorkOrderResponse.xml");
